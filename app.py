@@ -108,7 +108,7 @@ def procesar_archivo(lote_df, fecha_seleccionada):
             if campo in lote.columns:
                 resultado[campo] = lote[campo].apply(lambda x: str(x).zfill(enteros))
     
-    # Aplicar la regla: Si CUIL_APODERADO es null, a CUIL añadir un '2' como primer caracter, else '1'
+    # Aplicar la regla: Si CUIL_APODERADO es null, a CUIL añadir un '2' antes del primer dígito, else '1'
     if 'CUIL' in resultado.columns:
         # Necesitamos usar los datos del DataFrame lote para esta lógica
         for idx, row in resultado.iterrows():
@@ -116,11 +116,21 @@ def procesar_archivo(lote_df, fecha_seleccionada):
             lote_row = lote.iloc[idx]
             cuil_apoderado = lote_row.get('CUIL_APODERADO', None)
             
-            # Aplicar la regla
-            if pd.isna(cuil_apoderado) or cuil_apoderado == '' or cuil_apoderado is None:
-                resultado.at[idx, 'CUIL'] = '2' + resultado.at[idx, 'CUIL']
+            # Obtener el CUIL original antes del padding
+            cuil_original = str(lote_row.get('CUIL', ''))
+            
+            # Determinar el prefijo según la regla
+            prefijo = '2' if pd.isna(cuil_apoderado) or cuil_apoderado == '' or cuil_apoderado is None else '1'
+            
+            # Añadir el prefijo antes del primer dígito y luego aplicar el padding
+            if cuil_original and cuil_original.strip():
+                # Añadir el prefijo antes del primer dígito
+                cuil_con_prefijo = prefijo + cuil_original
+                # Aplicar padding hasta alcanzar la longitud requerida
+                resultado.at[idx, 'CUIL'] = cuil_con_prefijo.zfill(22)
             else:
-                resultado.at[idx, 'CUIL'] = '1' + resultado.at[idx, 'CUIL']
+                # En caso de CUIL vacío o solo espacios, mantener vacío
+                resultado.at[idx, 'CUIL'] = ''
     
     # Filtrar registros con SOLICITUD no nula
     resultado = resultado[(resultado['SOLICITUD'].notna())]
