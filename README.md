@@ -103,7 +103,7 @@ El archivo .hab generado tiene las siguientes características:
 
 ## Contacto y soporte
 
-Para consultas o reportes de problemas, por favor contacte al departamento de Administración.
+Para consultas o reportes de problemas, por favor contacte al https://ticketplease.onrender.com
 
 ---
 
