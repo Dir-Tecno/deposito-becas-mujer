@@ -41,7 +41,7 @@ st.sidebar.markdown("""
 3. **Descargar archivo** - Una vez procesado, descargue el archivo .hab generado.
 
 ### Columnas requeridas en el Excel
-- SUCURSAL_1
+- SUCURSAL
 - CUENTA
 - IMPORTE
 - SOLICITUD
@@ -67,10 +67,10 @@ def procesar_archivo(lote_df, fecha_seleccionada):
     # Definir datos del formato cliente directamente en el código
     datos_formato_cliente = [
         {'Orden': 1, 'Campo': 'TIPO DE CONVENIO', 'Enteros': 3, 'Decimales': 0, 'Total': 3, 'Tipo': 'N', 'default': '013'},
-        {'Orden': 2, 'Campo': 'SUCURSAL_1', 'Enteros': 5, 'Decimales': 0, 'Total': 5, 'Tipo': 'N', 'default': None},
+        {'Orden': 2, 'Campo': 'SUCURSAL', 'Enteros': 5, 'Decimales': 0, 'Total': 5, 'Tipo': 'N', 'default': None},
         {'Orden': 3, 'Campo': 'MONEDA', 'Enteros': 2, 'Decimales': 0, 'Total': 2, 'Tipo': 'N', 'default': '01'},
         {'Orden': 4, 'Campo': 'SISTEMA', 'Enteros': 1, 'Decimales': 0, 'Total': 1, 'Tipo': 'N', 'default': '3'},
-        {'Orden': 5, 'Campo': 'NRO CTA', 'Enteros': 9, 'Decimales': 0, 'Total': 9, 'Tipo': 'N', 'default': None},
+        {'Orden': 5, 'Campo': 'CUENTA', 'Enteros': 9, 'Decimales': 0, 'Total': 9, 'Tipo': 'N', 'default': None},
         {'Orden': 6, 'Campo': 'IMPORTE', 'Enteros': 18, 'Decimales': 2, 'Total': 18, 'Tipo': 'N', 'default': None},
         {'Orden': 7, 'Campo': 'FECHA', 'Enteros': 8, 'Decimales': 0, 'Total': 8, 'Tipo': 'N', 'default': fecha_seleccionada},
         {'Orden': 8, 'Campo': 'NRO CONVENIO CON LA EMPRESA', 'Enteros': 5, 'Decimales': 0, 'Total': 5, 'Tipo': 'N', 'default': '01465'},
@@ -189,13 +189,13 @@ with st.container():
         try:
             # Intentar leer el archivo
             df = pd.read_excel(uploaded_file, converters={
-                'SUCURSAL_1': str, 'CUENTA': str, 'IMPORTE': str, 
+                'SUCURSAL': str, 'CUENTA': str, 'IMPORTE': str, 
                 'SOLICITUD': str, 'CBU': str, 'CUOTA': str,
                 'CUIL': str, 'CUIL_APODERADO': str
             })
             
             # Verificar columnas requeridas
-            columnas_requeridas = ['SUCURSAL_1', 'CUENTA', 'IMPORTE', 'SOLICITUD', 'CBU', 'CUOTA', 'CUIL', 'CUIL_APODERADO']
+            columnas_requeridas = ['SUCURSAL', 'CUENTA', 'IMPORTE', 'SOLICITUD', 'CBU', 'CUOTA', 'CUIL', 'CUIL_APODERADO']
             columnas_faltantes = [col for col in columnas_requeridas if col not in df.columns]
             
             if columnas_faltantes:
